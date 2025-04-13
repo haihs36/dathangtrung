@@ -38,8 +38,8 @@ class AppController extends Controller
 
     const VERSION = '1.0.0';
     const API_TAOBAO = 'https://api-dota.gobiz.dev/api/M26/search';
-    const HOST_KEY = 'dGluZHVvbmdsb2dpc3RpY3Mudm4=';
-    const ALLOW_EXTENSIONS = ['nbaggmhipggbpmkicccgbkmidoohblga', 'hadehlljfgnhkdjegofgnkalefogbchh'];
+    const HOST_KEY = 'ZGF0aGFuZ3RydW5nLnZu';
+    const ALLOW_EXTENSIONS = ['nghlcghghkbcelfjbhgbkkbebnamdkcd', 'okkkpohnnjcpmdmbikolalomknfadkpn'];
     // Development environment constants
     const DEV_EXEC = true;
 
