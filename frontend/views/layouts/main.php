@@ -1,0 +1,1 @@
+<?php$menuList  = \common\components\CommonLib::getAllMenu();$this->beginContent('@app/views/layouts/base.php'); echo $this->render('@app/views/templates/_header',['menuList'=>$menuList]); ?>    <main>    <?php echo $content ?>    </main><?php echo $this->render('@app/views/templates/_footer'); $this->endContent(); ?>

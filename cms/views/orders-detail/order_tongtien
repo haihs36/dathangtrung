@@ -1,0 +1,154 @@
+<div class="tong-tien-don clearfix">
+                        <div class="box">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">Thông tin đơn hàng</h3>
+                                <div class="box-tools pull-right">
+                                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                </div>
+                            </div>
+                            <!--chi tiet don-->
+                            <div class="box-body pb0 pt0">
+                                <div class="text-right">
+                                    <!--thong tin don-->
+                                    <table class="table table-order-information" id="total-order">
+                                        <tbody>
+                                        <tr>
+                                            <td>
+                                                <p>
+                                                    <label>Mã khách hàng:</label>
+                                                    <b> <a target="_blank" title="Chi tiết khách hàng"
+                                                                href="<?php echo Url::toRoute(['customer/view', 'id' => $currentOrder->customerID]) ?>"><i
+                                                                    class="fa fa-eye" aria-hidden="true"></i> MKH-<?= $currentOrder->customerID ?></a>
+                                                    </b>
+                                                </p>
+                                                <p>
+                                                    <label>Tên khách hàng: </label>
+                                                    <b><?php echo \yii\helpers\Html::a($currentOrder->customer->fullname, ['customer/view', 'id' => $currentOrder->customerID], ['target' => '_blank']); ?></b>
+                                                    (<i><b><?= $currentOrder->customer->username ?></b></i>)
+                                                </p>
+                                                <p>
+                                                    <label>Nhân viên kinh doanh:</label>
+                                                    <b>
+                                                        <?php
+                                                            $business = $currentOrder->business;
+                                                            if ($business) {
+                                                                echo \yii\helpers\Html::a($business->username, ['user/view', 'id' => $business->id], ['target' => '_blank']);
+                                                            }
+                                                        ?>
+                                                    </b>
+                                                </p>
+                                                <p>
+                                                    <label>Mã đơn hàng:</label>
+                                                    <b><?= $currentOrder->identify; ?></b>
+                                                </p>
+                                                <p>
+                                                    <label>Ngày lên đơn:</label>
+                                                    <b><?= date('d-m-Y H:i:s', strtotime($currentOrder->orderDate)); ?></b>
+                                                </p>
+                                            </td>
+                                            <td>
+                                                <p>
+                                                    <?php
+                                                        $cny = ($currentOrder->cny) ? $currentOrder->cny : $setting['CNY'];
+                                                    ?>
+                                                    <label>Tỷ giá:</label><span class="currency vnd-unit"><?= $cny ?></span>
+                                                </p>
+                                                <p>
+                                                    <label>∑ Số kg:</label> <b><?= $currentOrder->totalWeight; ?> kg</b>
+                                                </p>
+                                                <p>
+                                                    <label>∑ Số sản phẩm:</label>
+                                                    <b><?= $currentOrder->totalQuantity; ?></b>
+                                                </p>
+
+                                            </td>
+                                            <td>
+                                                <div class="">
+                                                    <!--chi tiet don gia-->
+                                                    <p>
+                                                        <?php $phiGD = $currentOrder->discountDeals > 0 ? $currentOrder->discountDeals : $setting['TRANS']; ?>
+                                                        <label> Tổng phí dịch vụ:</label>
+                                                        <span class="vnd-unit currency"><?= $currentOrder->orderFee; ?></span>
+
+                                                    </p>
+                                                    <?php if ($currentOrder->totalShipVn) { ?>
+                                                        <p>
+                                                            <label>∑ Tiền ship <i class="red-color"><?= $currentOrder->totalShip; ?> (¥)</i>
+                                                            </label>
+                                                            <span class="vnd-unit currency"><?= $currentOrder->totalShipVn; ?></span>
+                                                        </p>
+                                                    <?php } ?>
+
+                                                    <?php //if ($currentOrder->totalWeightPrice) { ?>
+                                                    <p>
+                                                        <label>∑ Tiền cân nặng
+                                                            <!--<i
+                                                                                class="red-color">(<?/*= number_format(round($currentOrder->weightCharge)) */?>
+                                                                            /1kg)</i>:-->
+                                                        </label>
+                                                        <span class="vnd-unit currency"><?= $currentOrder->totalWeightPrice; ?></span>
+                                                    </p>
+                                                    <?php //} ?>
+                                                    <?php if ($currentOrder->incurredFee) { ?>
+                                                        <p>
+                                                            <label>Phí phát sinh đơn hàng:</label>
+                                                            <span class="vnd-unit currency"><?= $currentOrder->incurredFee; ?></span>
+                                                        </p>
+                                                    <?php } ?>
+                                                    <?php if ($currentOrder->totalIncurred) { ?>
+                                                        <p>
+                                                            <label>∑ Phí phát sinh:</label>
+                                                            <span class="vnd-unit currency"><?= $currentOrder->totalIncurred; ?></span>
+                                                        </p>
+                                                    <?php } ?>
+                                                    <p>
+                                                        <label>∑ Tiền hàng (¥):</label>
+                                                        <b><?= $currentOrder->totalOrderTQ; ?></b><em>¥</em>
+                                                    </p>
+                                                    <p class="bold total-shop">
+                                                        <label class="text-right">∑ Tiền hàng:</label>
+                                                        <span class="currency vnd-unit"><?= $currentOrder->totalOrder; ?></span>
+                                                    </p>
+                                                    <p><label class="text-right">∑ Tiền đơn hàng:</label>
+                                                        <span class="currency vnd-unit"><?= $currentOrder->totalPayment ?></span>
+                                                    </p>
+                                                    <p class="bold">
+                                                        <label class="text-right">∑ Tiền đã đặt cọc:
+                                                        </label>
+                                                        <span class="currency vnd-unit"><?= $currentOrder->totalPaid; ?></span>
+                                                    </p>
+                                                    <?php
+                                                        $totalOrderPrice = $currentOrder->totalPayment;//tong don hang
+                                                        $totalPaid       = $currentOrder->totalPaid;//tong tien coc
+                                                        $totalMoney      = 0;
+                                                        $is_cart_pay     = false;
+                                                        if ($totalOrderPrice >= $totalPaid) {
+                                                            $label      = '∑ Tiền thiếu';
+                                                            $totalMoney = $totalOrderPrice - $totalPaid;
+                                                        } else {
+                                                            $is_cart_pay = true;
+                                                            $label       = '∑ Tiền thừa';
+                                                            $totalMoney  = $totalPaid - $totalOrderPrice;
+                                                        }
+                                                    ?>
+                                                    <p class="bold">
+                                                        <label class="text-right">∑ Tiền nợ: </label>
+                                                        <span class="currency vnd-unit"><?= $currentOrder->debtAmount; ?></span>
+                                                        <?php if ($is_cart_pay && $currentOrder->debtAmount == 0) { ?>
+                                                            <a style="margin-left: 20px"
+                                                                    class="btn btn-success return-bank"
+                                                                    data-oid="<?= $currentOrder->orderID ?>"
+                                                                    data-price="<?= $totalMoney ?>"
+                                                                    data-url="<?= Url::toRoute(['bank/return', 'id' => $currentOrder->customerID]) ?>">
+                                                                Hoàn lại ví điện tử</a>
+                                                        <?php } ?>
+                                                    </p>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>

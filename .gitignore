@@ -1,0 +1,29 @@
+# dependencies
+.idea
+/idea
+/vendor
+/cms/runtime
+/cms/web/assets
+/frontend/runtime
+/frontend/web/assets
+/environments
+/console
+/file
+/backup_sv1
+/common/config/db.php
+
+yii
+yii_test
+yii_test.bat
+/yii
+/yii_test
+/yii_test.bat
+# misc
+.DS_Store
+composer.json
+composer.lock
+init
+init.bat
+
+
+
