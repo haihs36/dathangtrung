@@ -1,7 +1,7 @@
 <?php
   define('SHIPPER_TYPE', 1);
     define('ORDER_TYPE', 2);
-    define('ADMINISTRATOR','admin24h');
+    define('ADMINISTRATOR','admin'); //admin24h
     define('FROM','zh-CN');
     define('TO','vi');
     define('ADMIN', 1);
@@ -10,7 +10,7 @@
     define('BUSINESS', 10);//nv kd
     define('STAFFS', 4);//nv dat hang
     define('CLERK', 5); //nv ke toan
-
+define('COMPLAIN', 6); //khieu nai
     define('MN_BACK_END',1);
     define('MN_FRONT_END',2);
     define('ACTIVE', 1);

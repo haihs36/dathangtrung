@@ -370,28 +370,24 @@
                     // '{toggleData}'
                 ],
 
-                'panel'        => [
-                    'type'       => GridView::TYPE_PRIMARY,
-                    'showFooter' => false
-                ],
                 'export'       => [
                     'fontAwesome' => true,
                 ],
                 'responsive'   => false,
                 'exportConfig' => [
                     GridView::EXCEL => [
-                        'label'           => 'To Excel',
-                        'icon'            => 'file-excel-o',
-                        'iconOptions'     => '',
-                        'showHeader'      => true,
+                        'label' => 'To Excel',
+                        'icon' => 'file-excel-o',
+                        'iconOptions' => '',
+                        'showHeader' => true,
                         'showPageSummary' => true,
-                        'showFooter'      => true,
-                        'showCaption'     => true,
-                        'filename'        => 'Thong-ke-don-hang-' . date('d-m-Y'),
-                        'alertMsg'        => 'Bạn có chắc chắn muốn export ra excel?',
-                        'options'         => ['title' => 'Export Exce;'],
-                        'mime'            => 'application/excel',
-                        'config'          => [
+                        'showFooter' => true,
+                        'showCaption' => true,
+                        'filename' => 'Don-hang-' . date('d-m-Y'),
+                        'alertMsg' => 'created',
+                        'options' => ['title' => 'Semicolon -  Separated Values'],
+                        'mime' => 'application/excel',
+                        'config' => [
                             'colDelimiter' => ";",
                             'rowDelimiter' => "\r\n",
                         ],

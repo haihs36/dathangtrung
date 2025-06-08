@@ -2,6 +2,10 @@
     return [
         'timeZone'   => 'Asia/Ho_Chi_Minh',
         'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
+        'aliases' => [
+            '@bower' => '@vendor/bower-asset',
+            '@npm' => '@vendor/npm-asset',
+        ],
         'components' => [
             'menuHelper' => [
                 'class' => 'common\components\MenuHelper',

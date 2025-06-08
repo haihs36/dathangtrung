@@ -17,7 +17,6 @@
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'pjax' => true,
-//        'tableOptions' => ['class' => 'table table-bordered table-hover dataTable', 'id' => 'tbl_manager'],
         'tableOptions' => [
             'id'    => 'tbl_manager',
             'class' => 'table-hover'
@@ -27,28 +26,9 @@
             ['content'=>
                  Html::a('<i class="glyphicon glyphicon-repeat"></i>', ['orders/index'], ['data-pjax'=>false, 'class' => 'btn btn-default', 'title'=>'Reset Grid'])
             ],
-//            '{export}',
         ],
-        'panel' => [
-            'heading'=>'<h3 class="panel-title"><i class="fa fa-fw fa-users" aria-hidden="true"></i> Danh sách nhân viên </h3>',
-            'type' => GridView::TYPE_PRIMARY,
-            'showFooter'=>true
-        ],
+
         'columns' => [
-//            [
-//                'class' => 'yii\grid\CheckboxColumn',
-//                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 5%;'],
-//                'contentOptions' => ['class' => 'text-center'],
-//            ],
-            /*[
-                'header'        => 'ID',
-                'attribute'        => 'id',
-                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 8%;'],
-                'contentOptions' => ['class' => 'text-center'],
-                'value'         => function ($model) {
-                    return $model->id;
-                }
-            ],*/
             [
                 'headerOptions' => ['style' => 'width: 10%;'],
                 'label'         => 'avatar',
@@ -103,7 +83,7 @@
                     return $model->first_name.' '.$model->last_name;
                 }
             ],
-            
+
             [
                 'headerOptions' => ['style' => 'width: 15%;'],
                 'label'         => 'Điện thoại',

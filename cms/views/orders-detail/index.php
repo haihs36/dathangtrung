@@ -22,34 +22,29 @@ $this->params['breadcrumbs'][] = $this->title;
         'responsive'=>true,
         'exportConfig' => [
             GridView::EXCEL => [
-                'label'           => 'To Excel',
-                'icon'            => 'file-excel-o',
-                'iconOptions'     => '',
-                'showHeader'      => true,
+                'label' => 'To Excel',
+                'icon' => 'file-excel-o',
+                'iconOptions' => '',
+                'showHeader' => true,
                 'showPageSummary' => true,
-                'showFooter'      => true,
-                'showCaption'     => true,
-                'filename'        => 'List-product-' . date('d-m-Y'),
-                'alertMsg'        => 'created',
-                'options'         => ['title' => 'Semicolon -  Separated Values'],
-                'mime'            => 'application/excel',
-                'config'          => [
+                'showFooter' => true,
+                'showCaption' => true,
+                'filename' => 'Don-hang-' . date('d-m-Y'),
+                'alertMsg' => 'created',
+                'options' => ['title' => 'Semicolon -  Separated Values'],
+                'mime' => 'application/excel',
+                'config' => [
                     'colDelimiter' => ";",
                     'rowDelimiter' => "\r\n",
                 ],
             ],
-
         ],
 
         'toolbar' => [
             '{export}',
             '{toggleData}',
         ],
-        'panel' => [
-            'heading'=>'<h3 class="panel-title"><i class="fa fa-fw fa-users" aria-hidden="true"></i> Danh sách sản phẩm </h3>',
-            'type' => GridView::TYPE_PRIMARY,
-            'showFooter'=>true
-        ],
+
         'columns' => [
             [
                 'headerOptions' => ['style' => 'width: 5%;'],

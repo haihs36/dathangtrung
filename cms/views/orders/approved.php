@@ -222,38 +222,29 @@ $businuss = \common\components\CommonLib::listUser(0, [ADMIN, WAREHOUSE, WAREHOU
             '{export}',
             // '{toggleData}'
         ],
-        'panel'        => [
-            'heading'    => '<h3 class="panel-title"><i class="fa fa-cart-arrow-down"></i> Danh sách đơn hàng </h3>',
-            'type'       => GridView::TYPE_PRIMARY,
-            'showFooter' => false
-        ],
+
         'export'       => [
             'fontAwesome' => true,
         ],
         'responsive'   => false,
         'exportConfig' => [
             GridView::EXCEL => [
-                'label'           => 'To Excel',
-                'icon'            => 'file-excel-o',
-                'iconOptions'     => '',
-                'showHeader'      => true,
+                'label' => 'To Excel',
+                'icon' => 'file-excel-o',
+                'iconOptions' => '',
+                'showHeader' => true,
                 'showPageSummary' => true,
-                'showFooter'      => true,
-                'showCaption'     => true,
-                'filename'        => 'Don-hang-' . date('d-m-Y H:i'),
-                'alertMsg'        => 'created',
-                'options'         => ['title' => 'Semicolon -  Separated Values'],
-                'mime'            => 'application/excel',
-                'config'          => [
+                'showFooter' => true,
+                'showCaption' => true,
+                'filename' => 'Don-hang-' . date('d-m-Y'),
+                'alertMsg' => 'created',
+                'options' => ['title' => 'Semicolon -  Separated Values'],
+                'mime' => 'application/excel',
+                'config' => [
                     'colDelimiter' => ";",
                     'rowDelimiter' => "\r\n",
                 ],
             ],
-            /* GridView::CSV => ['label' => 'Export as CSV', 'filename' => 'File_Name-'.date('d-M-Y')],
-             GridView::HTML => ['label' => 'Export as HTML', 'filename' => 'File_Name -'.date('d-M-Y')],
-             GridView::PDF => ['label' => 'Export as PDF', 'filename' => 'File_Name -'.date('d-M-Y')],
-             GridView::EXCEL=> ['label' => 'Export as EXCEL', 'filename' => 'File_Name -'.date('d-M-Y')],
-             GridView::TEXT=> ['label' => 'Export as TEXT', 'filename' => 'File_Name -'.date('d-M-Y')],*/
         ],
     ]);
     ?>

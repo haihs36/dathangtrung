@@ -4,13 +4,13 @@
 
         'class' => 'yii\db\Connection',
 
-        'dsn' => 'mysql:host=127.0.0.1;dbname=dathangtru_db',
+        'dsn' => 'mysql:host=194.59.164.23;dbname=u688132139_dathangtrung',
 
         'emulatePrepare' => true,
 
-        'username' => 'dathangtru_db',
+        'username' => 'u688132139_dathangtru',
 
-        'password' => 'YLF7ZNd7jZPGeU3bQvXh',
+        'password' => '>t6OHYi&EXFThanhi@344',
 
         'charset' => 'utf8',
 

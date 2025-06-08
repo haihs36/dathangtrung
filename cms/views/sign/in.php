@@ -28,15 +28,7 @@
                                 'options'  => ['class' => 'form-group has-feedback']
                             ])->passwordInput(['class' => 'form-control', 'placeholder' => 'Mật khẩu'])->label(false) ?>
 
-                            <div class="form-group field-signupform-verifycode">
-                                <div class="row">
-                                    <div class="col-lg-12">
-                                        <div class="g-recaptcha" data-sitekey="<?php echo Yii::$app->params['CAPTCHA_SITE_KEY'] ?>"></div>
-                                        <!--js-->
-                                        <script src='https://www.google.com/recaptcha/api.js'></script>
-                                    </div>
-                                </div>
-                            </div>
+
                             <div class="row">
                                 <div class="col-xs-7">
                                     <?= $form->field($model, 'rememberMe', [

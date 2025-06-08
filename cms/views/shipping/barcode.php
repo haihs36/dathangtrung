@@ -30,11 +30,7 @@ $router                        = Yii::$app->controller->route;
                 ],
                 '{export}',
             ],
-            'panel'        => [
-                'heading'    => '<h3 class="panel-title"><i class="fa fa-fw fa-users" aria-hidden="true"></i> Danh sách mã vận đơn của đơn hàng </h3>',
-                'type'       => GridView::TYPE_PRIMARY,
-                'showFooter' => true
-            ],
+
             'columns'      => [
                 /*[
                     'class'         => 'yii\grid\SerialColumn',
@@ -209,25 +205,25 @@ $router                        = Yii::$app->controller->route;
             'export'       => [
                 'fontAwesome' => true,
             ],
-            'exportConfig' => [
-                GridView::EXCEL => [
-                    'label'           => 'To Excel',
-                    'icon'            => 'file-excel-o',
-                    'iconOptions'     => '',
-                    'showHeader'      => true,
-                    'showPageSummary' => true,
-                    'showFooter'      => true,
-                    'showCaption'     => true,
-                    'filename'        => 'Don-hang-' . date('d-m-Y H:i'),
-                    'alertMsg'        => 'created',
-                    'options'         => ['title' => 'Semicolon -  Separated Values'],
-                    'mime'            => 'application/excel',
-                    'config'          => [
-                        'colDelimiter' => ";",
-                        'rowDelimiter' => "\r\n",
-                    ],
+        'exportConfig' => [
+            GridView::EXCEL => [
+                'label' => 'To Excel',
+                'icon' => 'file-excel-o',
+                'iconOptions' => '',
+                'showHeader' => true,
+                'showPageSummary' => true,
+                'showFooter' => true,
+                'showCaption' => true,
+                'filename' => 'Don-hang-' . date('d-m-Y'),
+                'alertMsg' => 'created',
+                'options' => ['title' => 'Semicolon -  Separated Values'],
+                'mime' => 'application/excel',
+                'config' => [
+                    'colDelimiter' => ";",
+                    'rowDelimiter' => "\r\n",
                 ],
             ],
+        ],
         ]
     ); ?>
 

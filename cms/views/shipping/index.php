@@ -34,11 +34,7 @@
             ],
             '{export}',
         ],
-        'panel'        => [
-            'heading'    => '<h3 class="panel-title"><i class="fa fa-cart-arrow-down"></i> Danh sách mã vận đơn </h3>',
-            'type'       => GridView::TYPE_PRIMARY,
-            'showFooter' => false
-        ],
+
         'columns'      => [
 
             [
@@ -141,18 +137,18 @@
         ],
         'exportConfig' => [
             GridView::EXCEL => [
-                'label'           => 'To Excel',
-                'icon'            => 'file-excel-o',
-                'iconOptions'     => '',
-                'showHeader'      => true,
+                'label' => 'To Excel',
+                'icon' => 'file-excel-o',
+                'iconOptions' => '',
+                'showHeader' => true,
                 'showPageSummary' => true,
-                'showFooter'      => true,
-                'showCaption'     => true,
-                'filename'        => 'order-' . date('d-m-Y H:i'),
-                'alertMsg'        => 'created',
-                'options'         => ['title' => 'Semicolon -  Separated Values'],
-                'mime'            => 'application/excel',
-                'config'          => [
+                'showFooter' => true,
+                'showCaption' => true,
+                'filename' => 'Don-hang-' . date('d-m-Y'),
+                'alertMsg' => 'created',
+                'options' => ['title' => 'Semicolon -  Separated Values'],
+                'mime' => 'application/excel',
+                'config' => [
                     'colDelimiter' => ";",
                     'rowDelimiter' => "\r\n",
                 ],

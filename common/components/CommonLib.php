@@ -19,6 +19,7 @@ use common\models\TbService;
 use common\models\TbShipping;
 use common\models\TbTransfercode;
 use common\models\User;
+use phpseclib3\Crypt\Rijndael;
 use yii\db\Query;
 use yii\helpers\Url;
 
@@ -365,17 +366,48 @@ class CommonLib
         return $lowercase ? strtolower($string) : $string;
     }
 
-    public static function encryptIt($q)
+
+    const keyEncrypt = 'Khong!$%&^Noi';
+    const methodEncrypt = 'AES-256-CBC';
+
+    public static function decryptRijndael($encryptedBase64)
     {
-        $qEncoded = base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, md5(self::TOKEN), $q, MCRYPT_MODE_CBC, md5(md5(self::TOKEN))));
-        return ($qEncoded);
+        if (is_null($encryptedBase64)) return null;
+
+        $key = md5(self::TOKEN);
+        $iv = md5(md5(self::TOKEN));
+
+        $ciphertext = base64_decode($encryptedBase64);
+
+        $cipher = new Rijndael('cbc');
+        $cipher->setBlockLength(256);
+        $cipher->setKey($key);
+        $cipher->setIV($iv);
+        $cipher->disablePadding();
+
+        $decrypted = $cipher->decrypt($ciphertext);
+
+        return rtrim($decrypted, "\0");
     }
 
-    public static function decryptIt($q)
+
+    public static function encryptIt($data)
     {
-        if (is_null($q)) return null;
-        $qDecoded = rtrim(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, md5(self::TOKEN), base64_decode($q), MCRYPT_MODE_CBC, md5(md5(self::TOKEN))), "");
-        return ($qDecoded);
+        $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length(self::methodEncrypt));
+        $ciphertext = openssl_encrypt($data, self::methodEncrypt, self::keyEncrypt, OPENSSL_RAW_DATA, $iv);
+        return base64_encode($iv . $ciphertext);
+
+    }
+
+    public static function decryptIt($encrypted_data)
+    {
+        $encrypted_data = base64_decode($encrypted_data);
+        $iv_length = openssl_cipher_iv_length(self::methodEncrypt);
+        $iv = substr($encrypted_data, 0, $iv_length);
+        $ciphertext = substr($encrypted_data, $iv_length);
+
+        return openssl_decrypt($ciphertext, self::methodEncrypt, self::keyEncrypt, OPENSSL_RAW_DATA, $iv);
+
     }
 
     public static function getCity($id = '')

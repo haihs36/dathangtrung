@@ -88,31 +88,26 @@
          * @return boolean whether the user is logged in successfully
          */
         const CACHE_KEY = 'SIGNIN_TRIES_HOME';
-        Const EXPIRE_TIME = 1440000; //token expiration time, 4h
+        Const EXPIRE_TIME = 14400; //token expiration time, 4h
 
         public function login()
         {
-            $cache = Yii::$app->cache;
-//            if (($tries = (int)$cache->get(self::CACHE_KEY)) > 3) {
-//                $this->addError('username', 'You tried to login too often. Please wait 5 minutes.');
-//                return false;
-//            }
+            // $cache = Yii::$app->cache;
+            // if (($tries = (int)$cache->get(self::CACHE_KEY)) > 3) {
+            //     $this->addError('username', 'You tried to login too often. Please wait 5 minutes.');
+            //     return false;
+            // }
 
             if ($this->validate()) {
-                if ($this->_user->expire_at < time()) {
-                    $access_token = Yii::$app->security->generateRandomString(100);
-                    $this->_user->access_token = $access_token;
-                    $this->_user->expire_at = time() + static::EXPIRE_TIME;
-                    $this->_user->save(false);
+                $access_token = Yii::$app->security->generateRandomString(100);
+                $this->_user->access_token = $access_token;
+                $this->_user->expire_at = time() + static::EXPIRE_TIME;
+                $this->_user->save(false);
 
-                    //return Yii::$app->user->login($this->_user, static::EXPIRE_TIME);
-                }
-
-                return  Yii::$app->user->login($this->_user, static::EXPIRE_TIME);
-
+                 return Yii::$app->user->login($this->_user, static::EXPIRE_TIME);
             }
 
-//                $cache->set(self::CACHE_KEY, ++$tries, 300);
+              //  $cache->set(self::CACHE_KEY, ++$tries, 300);
              return false;
         }
 
@@ -126,17 +121,12 @@
         public function loginApi()
         {
             if ($this->validate()) {
-                if ($this->_user->expire_at < time()) {
-                    $access_token = Yii::$app->security->generateRandomString(100);
-                    $this->_user->access_token = $access_token;
-                    $this->_user->expire_at = time() + static::EXPIRE_TIME;
-                    $this->_user->save(false);
-
-                    //return Yii::$app->user->login($this->_user, static::EXPIRE_TIME);
-                }
+                $access_token = Yii::$app->security->generateRandomString(100);
+                $this->_user->access_token = $access_token;
+                $this->_user->expire_at = time() + static::EXPIRE_TIME;
+                $this->_user->save(false);
 
                 return  Yii::$app->user->login($this->_user, static::EXPIRE_TIME);
-
             }
 
             return false;
