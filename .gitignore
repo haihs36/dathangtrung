@@ -8,9 +8,9 @@
 /frontend/web/assets
 /environments
 /console
-#/file
- 
- 
+/file
+common/config/db.php
+
 
 yii
 yii_test
@@ -20,8 +20,6 @@ yii_test.bat
 /yii_test.bat
 # misc
 .DS_Store
-composer.json
-composer.lock
 init
 init.bat
 
