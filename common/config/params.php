@@ -13,7 +13,7 @@
         'VALID_SECRET_KEY'              => '',
         'CAPTCHA_SITE_KEY'              => '6Lfe9doUAAAAALjAWPhm3AfhMv5L4ZBH-wSI-75s',
         'CAPTCHA_SECRET_KEY'            => '6Lfe9doUAAAAAH7FFrKMn1_1fQchZkF0zE-8XJ-5',
-        'encrypt'                       => 'Mk/sYfszTTpTivNplBsHEOvNjKlZxJ1pLVQkr8C3Qgo=',
+        'encrypt'                       => '2n05UD33HKnSgMUXXWo1hhvJhLh7V2mTc0mZtfKSzEY=',
         'refresh_cache'                 => '123456',
         'user.passwordResetTokenExpire' => 3600,
         'baseUrl'                       => 'https://dathangtrung.vn',

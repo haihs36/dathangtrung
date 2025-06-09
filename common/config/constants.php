@@ -150,13 +150,13 @@ define('COMPLAIN', 6); //khieu nai
         define("GMAIL_SECRET_ID", ((isset($allSettings['gmailSecretId'])) ? $allSettings['gmailSecretId']['value'] : 1));
     }
 
-    if(!defined("VALID_SECRET_ID")){
-        define("VALID_SECRET_ID", 'Mk/sYfszTTpTivNplBsHEOvNjKlZxJ1pLVQkr8C3Qgo=');
-    }
+if (!defined("VALID_SECRET_ID")) {
+    define("VALID_SECRET_ID", '2n05UD33HKnSgMUXXWo1hhvJhLh7V2mTc0mZtfKSzEY=');
+}
 
-    if(!defined("VALID_SECRET_KEY")){
-        define("VALID_SECRET_KEY", 'CjsrHX01PvPVhfTxn91ncQO92u5RtmFavbPrpPLFXuk=');
-    }
+if (!defined("VALID_SECRET_KEY")) {
+    define("VALID_SECRET_KEY", 'T5WSJaRxUZR9KGUH6FInAOQ8/27p+NJQrVnTc7UsQYg=');
+}
     
     if (!defined("USE_YAHOO_LOGIN")) {
         define("USE_YAHOO_LOGIN", ((isset($allSettings['useYahooLogin'])) ? $allSettings['useYahooLogin']['value'] : 1));
