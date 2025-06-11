@@ -13,7 +13,7 @@
         $config['bootstrap'][]      = 'debug';
         $config['modules']['debug'] = [
             'class' => 'yii\debug\Module',
-           'allowedIPs' => ['180.148.142.233'],
+           'allowedIPs' => ['*'],
         ];
         $config['bootstrap'][]    = 'gii';
         $config['modules']['gii'] = 'yii\gii\Module';
