@@ -16,6 +16,14 @@ class SiteController extends Controller
     /**
      * @inheritdoc
      */
+    public function actions()
+    {
+        return [
+            'error' => [
+                'class' => 'yii\web\ErrorAction',
+            ],
+        ];
+    }
 
 
     /**
@@ -26,22 +34,6 @@ class SiteController extends Controller
     public function actionIndex()
     {
      
-
-       /* $url= 'https://thietkewebos.com/thong-bao.html';
-       $ch = curl_init($url);      
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);    
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);    
-        curl_setopt($ch, CURLOPT_GSSAPI_DELEGATION, CURLGSSAPI_DELEGATION_FLAG);    
-        curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_GSSNEGOTIATE);    
-        curl_setopt($ch, CURLOPT_USERPWD, ":");  
-        $result = curl_exec($ch);  
-        $json = json_decode($result, true);  
-        curl_close($ch);  
-      
-
-
-        pr($json);die;*/
-
 
         $role = \Yii::$app->user->identity->role;
 
