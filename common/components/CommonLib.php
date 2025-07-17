@@ -29,6 +29,51 @@ class CommonLib
     const TOKEN = 'qJB0rGtIn5UB1xG03efyCp';
     const TRANSLITERATE_LOOSE = 'Any-Latin; Latin-ASCII; [\u0080-\uffff] remove';
 
+
+    public static function normalizeUrl($url)
+    {
+
+        if (strpos($url, '//') === 0) {
+            // Nếu URL bắt đầu bằng "//", thêm "https:"
+            $url = 'https:' . $url;
+        }
+
+        return $url;
+    }
+
+    public static function downloadTaobaoImage($url)
+    {
+
+        $url = self::normalizeUrl($url);
+        // Tên file từ đường dẫn gốc
+        $fileName = basename(parse_url($url, PHP_URL_PATH));
+
+        // Đường dẫn vật lý lưu ảnh
+        $saveDir = \Yii::getAlias('@mediaImages');
+        if (!file_exists($saveDir)) {
+            mkdir($saveDir, 0777, true);
+        }
+
+        $savePath = $saveDir . DIRECTORY_SEPARATOR . $fileName;
+
+        // Nếu ảnh đã tồn tại thì không tải lại
+        if (!file_exists($savePath)) {
+            $imageContent = file_get_contents($url);
+            if ($imageContent === false) {
+                return false; // lỗi khi tải ảnh
+            }
+
+            file_put_contents($savePath, $imageContent);
+        }
+
+        // Trả về link ảnh (ví dụ: /file/media/images/tenfile.jpg)file/media/images
+        $imageUrl = \Yii::$app->params['FileDomain'] . '/media/images/' . $fileName;
+
+        return $imageUrl;
+    }
+
+
+
     public static function curlCoupon($product_id, $sourceName = '1688')
     {
         $api = 'http://partner.alibo.vn/customer_commission_api/?access_token=7f85ffaa82efce415e66ae4befd619fe';

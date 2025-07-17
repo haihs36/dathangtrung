@@ -7,4 +7,4 @@
     Yii::setAlias('@upload_dir', dirname(dirname(__DIR__)) . '/file/');
     //Yii::setAlias('@assetHome', dirname(dirname(__DIR__)) . '/frontend/web/assets');
 
-
+Yii::setAlias('@mediaImages', dirname(dirname(__DIR__)) . '/file/media/images');

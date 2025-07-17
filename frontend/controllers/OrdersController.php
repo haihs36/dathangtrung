@@ -246,6 +246,9 @@
                         $totalFinalAmountAll += $item['totalPriceVn'];
                     }
 
+                    $imageUrl = CommonLib::downloadTaobaoImage($item['image']);
+                    $item['image'] = $imageUrl ? $imageUrl :$item['image'];
+
                     $order[$item['shop_id']][$item['id']] = $item;//CommonLib::Translate($trans,$item);
                     if(isset($item['isCheck']) && $item['isCheck'] && !in_array($item['shop_id'],$arrShopChecked)){
                         $arrShopChecked[$item['shop_id']][] =  $item['id'];
