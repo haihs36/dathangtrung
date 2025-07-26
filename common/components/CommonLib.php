@@ -81,7 +81,7 @@ class CommonLib
 
             $savePath = $saveDir . DIRECTORY_SEPARATOR . $fileName;
             if (file_exists($savePath)) {
-                return \Yii::$app->params['FileDomain'] . '/file/media/images/' . $fileName;
+                return \Yii::$app->params['FileDomain'] . '/media/images/' . $fileName;
             }
 
             $imageContent = self::fetchImageWithCurl($originalUrl);
@@ -94,7 +94,7 @@ class CommonLib
 
             file_put_contents($savePath, $imageContent);
 
-            return \Yii::$app->params['FileDomain'] . '/file/media/images/' . $fileName;
+            return \Yii::$app->params['FileDomain'] . '/media/images/' . $fileName;
         } catch (\Exception $e) {
             return '';
         }
