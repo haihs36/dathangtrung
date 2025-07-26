@@ -30,46 +30,74 @@ class CommonLib
     const TRANSLITERATE_LOOSE = 'Any-Latin; Latin-ASCII; [\u0080-\uffff] remove';
 
 
+
     public static function normalizeUrl($url)
     {
-
         if (strpos($url, '//') === 0) {
-            // Nếu URL bắt đầu bằng "//", thêm "https:"
             $url = 'https:' . $url;
         }
-
         return $url;
+    }
+
+    public static function getOriginalImageUrl($url)
+    {
+        $parts = explode('_', $url);
+        return $parts[0];
+    }
+
+    public static function fetchImageWithCurl($url)
+    {
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115 Safari/537.36');
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 15);
+
+        $data = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        if ($httpCode === 200 && $data !== false) {
+            return $data;
+        }
+
+        return false;
     }
 
     public static function downloadTaobaoImage($url)
     {
+        try {
+            $url = self::normalizeUrl($url);
+            $originalUrl = self::getOriginalImageUrl($url);
+            $fallbackUrl = $url;
 
-        $url = self::normalizeUrl($url);
-        // Tên file từ đường dẫn gốc
-        $fileName = basename(parse_url($url, PHP_URL_PATH));
+            $fileName = basename(parse_url($fallbackUrl, PHP_URL_PATH));
+            if (!$fileName) return '';
 
-        // Đường dẫn vật lý lưu ảnh
-        $saveDir = \Yii::getAlias('@mediaImages');
-        if (!file_exists($saveDir)) {
-            mkdir($saveDir, 0777, true);
-        }
+            $saveDir = \Yii::getAlias('@mediaImages');
+            if (!file_exists($saveDir)) {
+                mkdir($saveDir, 0777, true);
+            }
 
-        $savePath = $saveDir . DIRECTORY_SEPARATOR . $fileName;
+            $savePath = $saveDir . DIRECTORY_SEPARATOR . $fileName;
+            if (file_exists($savePath)) {
+                return \Yii::$app->params['FileDomain'] . '/file/media/images/' . $fileName;
+            }
 
-        // Nếu ảnh đã tồn tại thì không tải lại
-        if (!file_exists($savePath)) {
-            $imageContent = file_get_contents($url);
+            $imageContent = self::fetchImageWithCurl($originalUrl);
             if ($imageContent === false) {
-                return false; // lỗi khi tải ảnh
+                $imageContent = self::fetchImageWithCurl($fallbackUrl);
+                if ($imageContent === false) {
+                    return '';
+                }
             }
 
             file_put_contents($savePath, $imageContent);
+
+            return \Yii::$app->params['FileDomain'] . '/file/media/images/' . $fileName;
+        } catch (\Exception $e) {
+            return '';
         }
-
-        // Trả về link ảnh (ví dụ: /file/media/images/tenfile.jpg)file/media/images
-        $imageUrl = \Yii::$app->params['FileDomain'] . '/media/images/' . $fileName;
-
-        return $imageUrl;
     }
 
 
