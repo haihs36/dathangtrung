@@ -7,6 +7,7 @@
     use yii\base\Model;
     use yii\data\ActiveDataProvider;
     use common\models\TbOrders;
+use yii\db\Expression;
 
     /**
      * TbOrderSearch represents the model behind the search form about `common\models\TbOrders`.
@@ -49,6 +50,190 @@
          */
         public function search($params, $isBook = null)
         {
+    
+            $query = TbOrders::find()
+                ->alias('o')
+                ->select([
+                    'o.orderID',
+                    'o.orderDate',
+                    'o.status',
+                    'o.totalOrder',
+                    'o.totalPaid',
+                    'o.totalQuantity',
+                    'o.customerID',
+                    'o.totalWeight',
+                    'o.totalWeightPrice',
+                    'o.totalOrderTQ',
+                    'o.shippingStatus',
+                    'o.totalPayment',
+                    'o.finshDate',
+                    'o.vnDate',
+                    'o.shippingDate',
+                    'o.deliveryDate',
+                    'o.businessID',
+                    'o.totalIncurred',
+                    'o.setDate',
+                    'o.weightCharge',
+                    'o.note_company',
+                    'o.quantity',
+                    'o.isBox',
+                    'o.updatetime',
+                    'o.weightDiscount',
+                    'o.buyDate',
+                    'o.requestPay',
+                    'o.isCheck',
+                    'o.paymentDate',
+                    'o.debtAmount',
+                    'o.shipDate',
+                    'o.orderStaff',
+                    'o.identify',
+                    'o.tag',
+    
+                    // Subquery lấy ảnh đầu tiên của order
+                    new Expression("(
+                    SELECT d.image 
+                    FROM tb_orders_detail d 
+                    WHERE d.orderID = o.orderID 
+                    ORDER BY d.id ASC 
+                    LIMIT 1
+                ) AS image"),
+    
+                    // Subquery lấy username của customer
+                    new Expression("(
+                    SELECT c.username 
+                    FROM tb_customers c 
+                    WHERE c.id = o.customerID 
+                    LIMIT 1
+                ) AS cusername"),
+    
+                    // Subquery lấy sourceName
+                    new Expression("(
+                    SELECT su.sourceName 
+                    FROM tb_order_supplier os 
+                    LEFT JOIN tb_supplier su ON su.supplierID = os.supplierID 
+                    WHERE os.orderID = o.orderID 
+                    LIMIT 1
+                ) AS sourceName"),
+                ]);
+    
+            if (!empty($params['orderNumber'])) {
+                $query->filterWhere(['o.identify' => trim($params['orderNumber'])]);
+            }
+    
+            if (!empty($params['barcode'])) {
+                $query->leftJoin(TbTransfercode::tableName() . ' t', 'o.orderID = t.orderID')
+                    ->filterWhere(['t.transferID' => trim($params['barcode'])]);
+            }
+    
+            if (!empty($params['shopProductID'])) {
+                $query->filterWhere(['like', 's.shopProductID', trim($params['shopProductID'])]);
+            }
+    
+            if (!empty($params['productname'])) {
+                $query->filterWhere(['like', 'pd.name', trim($params['productname'])]);
+            }
+    
+    //        $query->groupBy('o.orderID');
+    
+            $dataProvider = new ActiveDataProvider([
+                'query' => $query,
+                'pagination' => ['pageSize' => 15],
+                'sort' => ['defaultOrder' => ['setDate' => SORT_DESC]]
+            ]);
+    
+            $this->load($params);
+    
+            $status = $this->status;
+            $finterDate = 'o.orderDate';
+            $historyStatus = [];
+    
+            switch ($status) {
+                case 1: $finterDate = 'o.orderDate';     $historyStatus = [1]; break;
+                case 11:$finterDate = 'o.setDate';       $historyStatus = [11,2,3,4,8,9,6]; break;
+                case 2: $finterDate = 'o.orderDate';     $historyStatus = [2,3,4,8,9,6]; break;
+                case 3: $finterDate = 'o.shipDate';      $historyStatus = [3,4,8,9,6]; break;
+                case 4: $finterDate = 'o.deliveryDate';  $historyStatus = [4,8,9,6]; break;
+                case 8: $finterDate = 'o.shippingDate';  $historyStatus = [8,9,6]; break;
+                case 9: $finterDate = 'o.vnDate';        $historyStatus = [9,6]; break;
+                case 6: $finterDate = 'o.paymentDate';   $historyStatus = [6]; break;
+                case 5: $finterDate = 'o.orderDate';     $historyStatus = [5]; break;
+            }
+    
+            if (!empty($this->startDate)) {
+                $start = date('Y-m-d 00:00:00', strtotime(str_replace('/', '-', $this->startDate)));
+                $end   = !empty($this->endDate)
+                    ? date('Y-m-d 23:59:59', strtotime(str_replace('/', '-', $this->endDate)))
+                    : date('Y-m-d 23:59:59', strtotime(str_replace('/', '-', $this->startDate)));
+    
+                $query->andFilterWhere(['between', $finterDate, $start, $end]);
+            }
+    
+            $user = Yii::$app->user->identity;
+    
+            if ($user->role == BUSINESS) {
+                $query->andFilterWhere(['o.businessID' => $user->id]);
+            } elseif ($user->role == STAFFS) {
+                $query->andFilterWhere(['o.orderStaff' => $user->id]);
+            } elseif ($user->role == ADMIN) {
+                if (!empty($this->orderStaff))  $query->andFilterWhere(['o.orderStaff' => $this->orderStaff]);
+                if (!empty($this->businessID)) $query->andFilterWhere(['o.businessID' => $this->businessID]);
+            }
+    
+            if ($isBook === 0) {
+                $query->andFilterWhere(['o.active' => 1]);
+            }
+    
+            if ($user->role == WAREHOUSE && !in_array($status, [3,4,6])) {
+                $query->andFilterWhere(['o.status' => [3,4,6]]);
+            } else {
+                if (!empty($params['historyStatus']) && $params['historyStatus'] === 'yes') {
+                    $query->andFilterWhere(['in', 'o.status', $historyStatus]);
+                } else {
+                    $query->andFilterWhere(['o.status' => $status]);
+                }
+            }
+    
+            if ($this->requestPay) {
+                $query->andFilterWhere(['o.requestPay' => $this->requestPay, 'o.status' => 2]);
+            }
+    
+            $query->andFilterWhere([
+                'o.shippingStatus' => $this->shippingStatus,
+                'o.customerID'     => $this->customerID,
+                'o.provinID'       => $this->provinID,
+            ]);
+    
+            if (!empty($params['cusId'])) {
+                $query->andFilterWhere(['o.customerID' => trim($params['cusId'])]);
+            }
+    
+            if (!empty($params['website'])) {
+                $query->andFilterWhere(['su.sourceName' => trim($params['website'])]);
+            }
+    
+            if (!empty($params['setOrderStaff'])) {
+                if ($params['setOrderStaff'] == 1) {
+                    $query->andWhere(['not', ['o.orderStaff' => null]]);
+                } elseif ($params['setOrderStaff'] == 2) {
+                    $query->andWhere(['o.orderStaff' => null]);
+                }
+            }
+    
+            if (!empty($this->tag)) {
+                $tag = trim($this->tag);
+                $query->andFilterWhere([
+                    'or',
+                    ['like', 'o.tag', $tag . ',%', false],
+                    ['like', 'o.tag', '%,' . $tag, false],
+                    ['like', 'o.tag', ',' . $tag . ',']
+                ]);
+            }
+    
+            return $dataProvider;
+        }
+    
+        public function searchOld($params, $isBook = null)
+        {
 
             $query = TbOrders::find()
                 ->select(['d.image', 'o.isCheck', 'o.isBox', 'o.quantity', 'o.weightCharge', 'c.fullname as cfullname', 'o.shipDate', 'o.debtAmount', 'o.paymentDate', 'p.name', 'su.sourceName', 'o.finshDate', 'o.vnDate', 'o.shippingDate', 'o.deliveryDate', 's.actualPayment',
@@ -61,6 +246,7 @@
                 ->leftJoin(TbOrdersDetail::tableName() . ' d', 'o.orderID = d.orderID')
                 // ->leftJoin(TbProduct::tableName() . ' pd', 'd.productID = pd.productID')
                 ->leftJoin(Province::tableName() . ' p', 'o.provinID = p.id');
+                
 
             if (isset($params['orderNumber']) && !empty($params['orderNumber'])) {
                 $query->filterWhere(['o.identify' => trim($params['orderNumber'])]);

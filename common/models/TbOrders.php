@@ -419,7 +419,65 @@ class TbOrders extends \yii\db\ActiveRecord
     }
 
 
-    public static function getOrderCount($isBook = null,$isCustomer = false)
+    public static function getOrderCount($isBook = null, $isCustomer = false)
+    {
+        $user = Yii::$app->user->identity;
+
+        $query = self::find()
+            ->select([
+                'status',
+                "SUM(CASE WHEN requestPay = 1 AND status = 2 THEN 1 ELSE 0 END) AS requestPayCount",
+                "COUNT(*) as total"
+            ])
+            ->groupBy('status');
+
+        // Lọc theo trạng thái đơn hàng
+        if ($isBook || $user->role == WAREHOUSE) {
+            $query->andFilterWhere(['status' => [3, 4, 6]]);
+        } elseif ($isBook === 0) {
+            $query->andFilterWhere(['active' => 1]);
+        }
+
+        // Lọc theo vai trò người dùng
+        switch ($user->role) {
+            case BUSINESS:
+                $query->andFilterWhere(['businessID' => (int)$user->id]);
+                break;
+            case STAFFS:
+                $query->andFilterWhere(['orderStaff' => (int)$user->id]);
+                break;
+            case COMPLAIN:
+                $query->andFilterWhere(['userComplain' => (int)$user->id]);
+                break;
+        }
+
+        if ($isCustomer) {
+            $query->andFilterWhere(['customerID' => (int)$user->id]);
+        }
+
+        $raw = $query->asArray()->all();
+
+        // Khởi tạo mảng kết quả
+        $orderStatus = array_fill(0, 13, 0);
+
+        foreach ($raw as $row) {
+            $status = (int)$row['status'];
+            $count = (int)$row['total'];
+            $reqPay = (int)$row['requestPayCount'];
+
+            if (isset($orderStatus[$status])) {
+                $orderStatus[$status] += $count;
+            }
+
+            $orderStatus[12] += $reqPay;  // đơn yêu cầu thanh toán
+            $orderStatus[0] += $count;    // tổng số đơn
+        }
+
+        return $orderStatus;
+    }
+
+
+    public static function getOrderCount1($isBook = null,$isCustomer = false)
     {
         $query = self::find()->select(['status']);
         /*
