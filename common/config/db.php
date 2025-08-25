@@ -4,7 +4,7 @@
 
         'class' => 'yii\db\Connection',
 
-        'dsn' => 'mysql:host=localhost;dbname=u688132139_dathangtrung',
+        'dsn' => 'mysql:host=127.0.0.1;dbname=u688132139_dathangtrung',
 
         'emulatePrepare' => true,
 
